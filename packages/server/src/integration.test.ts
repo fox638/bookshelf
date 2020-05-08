@@ -4,7 +4,7 @@ import { Connection, getConnection } from "typeorm";
 
 import { Author } from "./database/entity/Author";
 import { Book } from "./database/entity/Book";
-import { secureId } from "./database/helpers";
+import { secureId } from "./helpers";
 import { createServer } from "./server";
 
 let connection: Connection;

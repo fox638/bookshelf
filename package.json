@@ -11,6 +11,7 @@
     "packages/*"
   ],
   "scripts": {
+    "secure-id": "yarn workspace @bookshelf/secure-id",
     "server": "yarn workspace @bookshelf/server",
     "web": "yarn workspace @bookshelf/web",
     "test": "jest",

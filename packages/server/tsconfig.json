@@ -4,7 +4,13 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "outDir": "dist",
-    "strictPropertyInitialization": false
+    "strictPropertyInitialization": false,
+    "sourceRoot": "./src",
+    "rootDir": "./src",
+    "baseUrl": "."
   },
-  "include": ["scripts", "src"]
+  "include": ["src"],
+  "references": [
+    { "path": "../secure-id" }
+  ]
 }

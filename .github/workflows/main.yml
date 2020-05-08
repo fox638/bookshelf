@@ -33,6 +33,14 @@ jobs:
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
 
+    ## SecureId
+
+    - name: Lint
+      run: yarn secure-id lint
+
+    - name: Build
+      run: yarn secure-id build
+
     ## Server
 
     - name: Lint

@@ -1,0 +1,12 @@
+{
+  "name": "@bookshelf/secure-id",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "yarn clean && tsc",
+    "typecheck": "tsc --project tsconfig.json --noEmit",
+    "lint": "eslint . --ext .ts",
+    "test": "jest"
+  }
+}

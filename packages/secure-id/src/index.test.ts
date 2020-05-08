@@ -1,4 +1,4 @@
-import { SecureId } from "./SecureId";
+import { SecureId } from "./index";
 
 describe("SecureId", () => {
   it("can accept different separator", () => {

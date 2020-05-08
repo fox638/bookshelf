@@ -5,7 +5,7 @@ import { Author } from "../database/entity/Author";
 import { Avatar } from "../database/entity/Avatar";
 import { Book } from "../database/entity/Book";
 import { User } from "../database/entity/User";
-import { secureId } from "../database/helpers";
+import { secureId } from "../helpers";
 import { Context } from "../server";
 
 interface Image {
