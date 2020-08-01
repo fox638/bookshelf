@@ -1,4 +1,6 @@
-import { UserRepository } from "../../database/repositories/UserRepository";
+import { Container } from "typedi";
+
+import { UsersService } from "../../database/UsersService";
 import {
   MutationLoginArgs,
   ResolversTypes
@@ -15,23 +17,22 @@ describe("login authentication resolver", () => {
   test("on login success", async () => {
     // Given
     const user = { id: 123 };
-    const userRepository = {
+    const usersService = {
       findByEmailAndPassword: jest.fn().mockResolvedValue(user)
     };
-    const connection = {
-      getCustomRepository: jest.fn().mockReturnValue(userRepository)
-    };
+    Container.set(UsersService, usersService);
 
     // When
     const result = await login(
       undefined,
-      { input: { email: "example@email.com", password: "password" } },
-      { connection }
+      {
+        input: { email: "example@email.com", password: "password" }
+      },
+      {}
     );
 
     // Then
-    expect(connection.getCustomRepository).toHaveBeenCalledWith(UserRepository);
-    expect(userRepository.findByEmailAndPassword).toHaveBeenCalledWith(
+    expect(usersService.findByEmailAndPassword).toHaveBeenCalledWith(
       "example@email.com",
       "password"
     );
@@ -46,17 +47,16 @@ describe("login authentication resolver", () => {
   test("on error error", async () => {
     // Given
     const user = undefined;
-    const connection = {
-      getCustomRepository: jest.fn().mockReturnValue({
-        findByEmailAndPassword: jest.fn().mockResolvedValue(user)
-      })
+    const usersService = {
+      findByEmailAndPassword: jest.fn().mockResolvedValue(user)
     };
+    Container.set(UsersService, usersService);
 
     // When
     const result = await login(
       undefined,
       { input: { email: "example@email.com", password: "invalid password" } },
-      { connection }
+      {}
     );
 
     // Then
