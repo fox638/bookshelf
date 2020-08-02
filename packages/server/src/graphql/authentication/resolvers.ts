@@ -1,9 +1,9 @@
 import { Container } from "typedi";
 
 import { generateAuthToken } from "../../common/authentication";
-import { UsersService } from "../../database/UsersService";
 import { Context } from "../context";
 import { Resolvers } from "../resolvers-types.generated";
+import { AuthenticationService } from "./AuthenticationService";
 
 const resolvers: Resolvers<Context> = {
   Query: {
@@ -12,8 +12,9 @@ const resolvers: Resolvers<Context> = {
 
   Mutation: {
     login: async (rootValue, { input: { email, password } }) => {
-      const usersService = Container.get(UsersService);
-      const user = await usersService.findByEmailAndPassword(email, password);
+      const user = await Container.get(
+        AuthenticationService
+      ).findUserByEmailAndPassword(email, password);
 
       const authToken = user ? generateAuthToken(user) : null;
 

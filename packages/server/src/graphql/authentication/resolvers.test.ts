@@ -1,10 +1,10 @@
 import { Container } from "typedi";
 
-import { UsersService } from "../../database/UsersService";
 import {
   MutationLoginArgs,
   ResolversTypes
 } from "../resolvers-types.generated";
+import { AuthenticationService } from "./AuthenticationService";
 import resolvers from "./resolvers";
 
 const login = resolvers.Mutation!.login! as (
@@ -20,7 +20,7 @@ describe("login authentication resolver", () => {
     const usersService = {
       findByEmailAndPassword: jest.fn().mockResolvedValue(user)
     };
-    Container.set(UsersService, usersService);
+    Container.set(AuthenticationService, usersService);
 
     // When
     const result = await login(
@@ -50,7 +50,7 @@ describe("login authentication resolver", () => {
     const usersService = {
       findByEmailAndPassword: jest.fn().mockResolvedValue(user)
     };
-    Container.set(UsersService, usersService);
+    Container.set(AuthenticationService, usersService);
 
     // When
     const result = await login(

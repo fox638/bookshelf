@@ -2,15 +2,15 @@ import { Service } from "typedi";
 import { Repository } from "typeorm";
 import { InjectRepository } from "typeorm-typedi-extensions";
 
-import { isPasswordValid } from "../common/authentication";
-import { User } from "./entity";
+import { isPasswordValid } from "../../common/authentication";
+import { User } from "../../database/entity";
 
 @Service()
-export class UsersService {
+export class AuthenticationService {
   @InjectRepository(User)
   private repository: Repository<User>;
 
-  async findByEmailAndPassword(
+  async findUserByEmailAndPassword(
     email: string,
     password: string
   ): Promise<undefined | User> {

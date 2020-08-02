@@ -1,6 +1,11 @@
 import faker from "faker";
 import { Container } from "typedi";
-import { createConnection, useContainer, getConnection } from "typeorm";
+import {
+  createConnection,
+  useContainer,
+  getConnection,
+  Connection
+} from "typeorm";
 
 useContainer(Container);
 
@@ -11,7 +16,9 @@ beforeEach(() => {
 
 beforeEach(async () => {
   Container.reset();
-  await createConnection();
+
+  const connection = await createConnection();
+  Container.set(Connection, connection);
 });
 
 afterEach(() => getConnection().close());
