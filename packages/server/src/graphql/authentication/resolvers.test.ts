@@ -17,10 +17,10 @@ describe("login authentication resolver", () => {
   test("on login success", async () => {
     // Given
     const user = { id: 123 };
-    const usersService = {
-      findByEmailAndPassword: jest.fn().mockResolvedValue(user)
+    const authenticationService: Partial<AuthenticationService> = {
+      findUserByEmailAndPassword: jest.fn().mockResolvedValue(user)
     };
-    Container.set(AuthenticationService, usersService);
+    Container.set(AuthenticationService, authenticationService);
 
     // When
     const result = await login(
@@ -32,10 +32,9 @@ describe("login authentication resolver", () => {
     );
 
     // Then
-    expect(usersService.findByEmailAndPassword).toHaveBeenCalledWith(
-      "example@email.com",
-      "password"
-    );
+    expect(
+      authenticationService.findUserByEmailAndPassword
+    ).toHaveBeenCalledWith("example@email.com", "password");
 
     expect(result).toMatchObject({
       success: true,
@@ -47,10 +46,10 @@ describe("login authentication resolver", () => {
   test("on error error", async () => {
     // Given
     const user = undefined;
-    const usersService = {
-      findByEmailAndPassword: jest.fn().mockResolvedValue(user)
+    const authenticationService: Partial<AuthenticationService> = {
+      findUserByEmailAndPassword: jest.fn().mockResolvedValue(user)
     };
-    Container.set(AuthenticationService, usersService);
+    Container.set(AuthenticationService, authenticationService);
 
     // When
     const result = await login(

@@ -1,6 +1,6 @@
 import { Service } from "typedi";
-import { Connection } from "typeorm";
-import { InjectConnection } from "typeorm-typedi-extensions";
+import { Connection, EntityManager } from "typeorm";
+import { InjectConnection, InjectManager } from "typeorm-typedi-extensions";
 
 import { hashPassword } from "../../common/authentication";
 import { Avatar, User } from "../../database/entity";
@@ -9,6 +9,9 @@ import { Avatar, User } from "../../database/entity";
 export class UserService {
   @InjectConnection()
   private connection: Connection;
+
+  @InjectManager()
+  private manager: EntityManager;
 
   async createWithAvatar(
     userAttributes: Partial<User> & { password: string },
@@ -35,5 +38,17 @@ export class UserService {
     } finally {
       await queryRunner.release();
     }
+  }
+
+  async update(
+    id: number | string,
+    userAttributes: Partial<User>
+  ): Promise<User> {
+    const user = await this.manager.findOneOrFail(User, id);
+    return this.manager.save(this.manager.merge(User, user, userAttributes));
+  }
+
+  delete(id: number | string) {
+    return this.manager.delete(User, id);
   }
 }
