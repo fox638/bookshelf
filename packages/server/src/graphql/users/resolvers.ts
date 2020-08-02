@@ -1,7 +1,7 @@
-import { hashPassword } from "../../common/authentication";
-import { Avatar, User } from "../../database/entity";
+import { User } from "../../database/entity";
 import { Context } from "../context";
 import { Resolvers } from "../resolvers-types.generated";
+import { UserService } from "./UserService";
 
 const resolvers: Resolvers<Context> = {
   Query: {
@@ -12,25 +12,14 @@ const resolvers: Resolvers<Context> = {
   },
 
   Mutation: {
-    createUser: async (rootValue, args, { connection }) => {
+    createUser: async (rootValue, args, { container }) => {
       const { avatar: avatarAttributes, ...userAttributes } = args.input;
 
-      const queryRunner = connection.createQueryRunner();
-      await queryRunner.connect();
-
       try {
-        await queryRunner.startTransaction();
-
-        const avatar = queryRunner.manager.create(Avatar, avatarAttributes);
-        await queryRunner.manager.save(avatar);
-
         // TODO: Add validations for userAttributes, like email, password min length etc
-        const user = queryRunner.manager.create(User, {
-          ...userAttributes,
-          passwordHash: hashPassword(userAttributes.password),
-          avatar
-        });
-        await queryRunner.manager.save(user);
+        const user = await container
+          .get(UserService)
+          .createWithAvatar(userAttributes, avatarAttributes);
 
         return {
           success: true,
@@ -38,10 +27,10 @@ const resolvers: Resolvers<Context> = {
           user
         };
       } catch (error) {
-        await queryRunner.rollbackTransaction();
-        throw error;
-      } finally {
-        await queryRunner.release();
+        return {
+          success: false,
+          message: error.message
+        };
       }
     },
 
