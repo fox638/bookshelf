@@ -28,7 +28,7 @@ describe("login authentication resolver", () => {
       {
         input: { email: "example@email.com", password: "password" }
       },
-      {}
+      { container: Container }
     );
 
     // Then
@@ -55,7 +55,7 @@ describe("login authentication resolver", () => {
     const result = await login(
       undefined,
       { input: { email: "example@email.com", password: "invalid password" } },
-      {}
+      { container: Container }
     );
 
     // Then
